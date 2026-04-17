@@ -1,22 +1,39 @@
 package com.example.attendance.controller;
 
-import com.example.attendance.Attendance;
 import com.example.attendance.Result;
-import org.springframework.web.bind.annotation.*;
+import com.example.attendance.entity.Attendance;
+import com.example.attendance.service.AttendanceService;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import java.util.List;
 
-/**
- * 考勤控制器（任务三专用）
- */
 @RestController
+@RequestMapping("/attendance")
 public class AttendanceController {
 
-    // 任务三：JSON请求体更新考勤记录
-    @PostMapping("/attendance/update")
-    public Result<String> updateAttendance(@RequestBody Attendance attendance) {
-        // 模拟业务逻辑：打印接收的考勤数据
-        System.out.println("更新考勤记录：" + attendance);
-        return Result.success("考勤记录更新成功");
+    private final AttendanceService attendanceService;
+
+    public AttendanceController(AttendanceService attendanceService) {
+        this.attendanceService = attendanceService;
+    }
+
+    // 查询某课程的所有考勤记录
+    @GetMapping("/course/{courseId}")
+    public Result<List<Attendance>> getAttendanceByCourse(@PathVariable String courseId) {
+        return Result.success(attendanceService.getAttendanceByCourse(courseId));
+    }
+
+    // 查询某学生的所有考勤记录
+    @GetMapping("/{studentId}/records")
+    public Result<List<Attendance>> getStudentAttendance(@PathVariable String studentId) {
+        return Result.success(attendanceService.getStudentAttendance(studentId));
+    }
+
+    // 统计某课程的缺勤人数
+    @GetMapping("/course/{courseId}/absent-count")
+    public Result<Long> countAbsentStudents(@PathVariable String courseId) {
+        return Result.success(attendanceService.countAbsentStudents(courseId));
     }
 }
-
-

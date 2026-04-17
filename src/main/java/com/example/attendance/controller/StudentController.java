@@ -1,42 +1,39 @@
 package com.example.attendance.controller;
 
 import com.example.attendance.Result;
-import com.example.attendance.Student;
+import com.example.attendance.entity.Student;
 import com.example.attendance.service.StudentService;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
+@RequestMapping("/students")
 public class StudentController {
 
     private final StudentService studentService;
 
-    // 构造函数注入
     public StudentController(StudentService studentService) {
         this.studentService = studentService;
     }
 
-    // 任务一：路径参数查询学生信息
-    @GetMapping("/student/info/{studentId}")
-    public Result<Student> getStudentById(@PathVariable String studentId) {
-        Student student = studentService.getStudentById(studentId);
-        if (student != null) {
-            return Result.success(student);
-        }
-        return Result.error("未找到该学生");
+    // 查询某课程的所有选课学生
+    @GetMapping("/course/{courseId}")
+    public Result<List<Student>> getStudentsByCourse(@PathVariable String courseId) {
+        return Result.success(studentService.getStudentsByCourse(courseId));
     }
 
-    // 任务二：查询参数查询学生列表（含简单分页）
-    @GetMapping("/student/list")
-    public Result<List<Student>> getStudentList(
-            @RequestParam String className,
-            @RequestParam(defaultValue = "1") int page) {
-        List<Student> list = studentService.getStudentList(className);
-        // 简单分页处理
-        int pageSize = 2;
-        int fromIndex = (page - 1) * pageSize;
-        int toIndex = Math.min(fromIndex + pageSize, list.size());
-        List<Student> pageList = list.subList(fromIndex, toIndex);
-        return Result.success(pageList);
+    // 查询某学生的所有选课记录
+    @GetMapping("/{studentId}/courses")
+    public Result<List<Student>> getStudentCourses(@PathVariable String studentId) {
+        return Result.success(studentService.getStudentCourses(studentId));
+    }
+
+    // 统计某课程的选课人数
+    @GetMapping("/course/{courseId}/count")
+    public Result<Long> countCourseStudents(@PathVariable String courseId) {
+        return Result.success(studentService.countCourseStudents(courseId));
     }
 }

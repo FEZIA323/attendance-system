@@ -1,9 +1,10 @@
 package com.example.attendance.service;
 
-import com.example.attendance.Student;
+import com.example.attendance.entity.Student;
 import java.util.List;
 
 public interface StudentService {
-    Student getStudentById(String studentId);
-    List<Student> getStudentList(String className);
+    List<Student> getStudentsByCourse(String courseId);
+    List<Student> getStudentCourses(String studentId);
+    long countCourseStudents(String courseId);
 }
