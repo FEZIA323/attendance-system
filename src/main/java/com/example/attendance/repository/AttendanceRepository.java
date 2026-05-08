@@ -1,12 +1,17 @@
 package com.example.attendance.repository;
 
 import com.example.attendance.entity.Attendance;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import java.util.List;
 
+
 @Repository
-public interface AttendanceRepository extends JpaRepository<Attendance, Integer> {
+public interface AttendanceRepository extends JpaRepository<Attendance, Integer> ,JpaSpecificationExecutor<Attendance> {
 
     // 1. 根据课程ID查询所有考勤记录
     List<Attendance> findByCourseId(String courseId);
@@ -20,4 +25,8 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Integer>
 
     // 4. 统计某课程的缺勤人数
     long countByCourseIdAndStatus(String courseId, String status);
+
+    // 分页查询全部考勤记录（课件原生方法）
+    Page<Attendance> findAll(Pageable pageable);
+
 }
