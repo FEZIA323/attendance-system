@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>选课记录列表</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
+<body class="bg-light py-5">
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <h2 class="text-primary"><i class="bi bi-table"></i> 学生选课记录</h2>
+        <a th:href="@{/students/add}" class="btn btn-success shadow-sm">
+            <i class="bi bi-plus-circle"></i> 新增选课
+        </a>
+    </div>
+
+    <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
+        <div class="table-responsive">
+            <table class="table table-hover table-mb-0">
+                <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>学生编号</th>
+                    <th>学生姓名</th>
+                    <th>性别</th>
+                    <th>课程编号</th>
+                    <th>选课时间</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="stu : ${students}">
+                    <td th:text="${stu.id}"></td>
+                    <td th:text="${stu.studentId}"></td>
+                    <td th:text="${stu.studentName}"></td>
+                    <td th:text="${stu.gender}"></td>
+                    <td th:text="${stu.courseId}"></td>
+                    <td th:text="${stu.selectTime}"></td>
+                    <td>
+                        <a th:href="@{/students/edit/{id}(id=${stu.id})}" class="btn btn-sm btn-warning">
+                            <i class="bi bi-pencil-square"></i> 编辑
+                        </a>
+                        <a th:href="@{/students/delete/{id}(id=${stu.id})}" class="btn btn-sm btn-danger ms-1"
+                           onclick="return confirm('确定删除？')">
+                            <i class="bi bi-trash-fill"></i> 删除
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <nav class="mt-4">
+        <ul class="pagination justify-content-center shadow-sm">
+            <li class="page-item" th:class="${currentPage == 1} ? 'disabled' : ''">
+                <a class="page-link" th:href="@{/students/list(page=${currentPage} - 1)}">上一页</a>
+            </li>
+            <li class="page-item" th:each="i : ${#numbers.sequence(1, totalPages)}"
+                th:class="${i == currentPage} ? 'active' : ''">
+                <a class="page-link" th:href="@{/students/list(page=${i})}" th:text="${i}"></a>
+            </li>
+            <li class="page-item" th:class="${currentPage == totalPages} ? 'disabled' : ''">
+                <a class="page-link" th:href="@{/students/list(page=${currentPage} + 1)}">下一页</a>
+            </li>
+        </ul>
+    </nav>
+</div>
+</body>
+</html>

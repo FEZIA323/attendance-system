@@ -25,6 +25,6 @@ public class Student {
     @Column(name = "course_id", nullable = false, length = 20)
     private String courseId;
 
-    @Column(name = "select_time", columnDefinition = "DATETIME DEFAULT GETDATE()")
+    @Column(name = "select_time")
     private LocalDateTime selectTime;
 }
