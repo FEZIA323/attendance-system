@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>考勤系统首页</title>
+    <style>
+        .container { width: 600px; margin: 100px auto; text-align: center; }
+        a { margin: 0 15px; padding: 10px 20px; background: #007bff; color: white; text-decoration: none; border-radius: 4px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>欢迎使用班级考勤管理系统</h2>
+    <p>当前登录用户：<span th:text="${username}"></span></p>
+    <br>
+    <a th:href="@{/attendance/page/sort}">考勤分页查询</a>
+    <a th:href="@{/userlist/teachers}">查看教师列表</a>
+    <a th:href="@{/userlist/logout}">退出登录</a>
+</div>
+</body>
+</html>

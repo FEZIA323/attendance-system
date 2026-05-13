@@ -21,8 +21,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public int addUser(User user) {
-        if (user.getUsername() == null || user.getUsername().trim().isEmpty()) {
-            throw new IllegalArgumentException("用户名不能为空");
+        if (user.getUsername() == null || user.getUsername().isEmpty()) {
+            throw new RuntimeException("用户名不能为空");
         }
         return userDao.insert(user);
     }
@@ -52,29 +52,29 @@ public class UserServiceImpl implements UserService {
         return userDao.deleteById(id);
     }
 
-    // ✅ 正确的注册方法
     @Override
     public User register(User user) {
-        User exist = userDao.findByUsername(user.getUsername());
-        if (exist != null) {
+        if (userDao.findByUsername(user.getUsername()) != null) {
             throw new RuntimeException("用户名已存在");
         }
-
-        // 密码加密
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-
-        if (user.getRole() == null || user.getRole().isBlank()) {
-            user.setRole("STUDENT");
-        }
+        user.setRole(user.getRole() == null ? "STUDENT" : user.getRole());
         user.setCreateTime(LocalDateTime.now());
-
         userDao.insert(user);
         return user;
     }
 
-    // ✅ 不用的方法直接实现空
     @Override
     public User register(String username, String password, String role) {
-        return null;
+        if (userDao.findByUsername(username) != null) {
+            throw new RuntimeException("用户名已存在");
+        }
+        User user = new User();
+        user.setUsername(username);
+        user.setPassword(passwordEncoder.encode(password));
+        user.setRole(role == null ? "STUDENT" : role);
+        user.setCreateTime(LocalDateTime.now());
+        userDao.insert(user);
+        return user;
     }
 }
